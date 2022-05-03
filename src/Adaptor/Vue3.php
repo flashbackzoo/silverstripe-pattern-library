@@ -1,6 +1,6 @@
 <?php
 
-namespace Flashbackzoo\SilverstripeStorybook\Adaptor;
+namespace Flashbackzoo\SilverstripePatternLibrary\Adaptor;
 
 class Vue3
 {

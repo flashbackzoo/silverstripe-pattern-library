@@ -1,5 +1,5 @@
 ---
-Name: flashbackzoo-storybook
+Name: flashbackzoo-patternlibrary
 ---
-Flashbackzoo\SilverstripeStorybook\Storybook:
+Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   version: "6"

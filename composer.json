@@ -17,8 +17,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Flashbackzoo\\SilverstripeStorybook\\": "src/",
-            "Flashbackzoo\\SilverstripeStorybook\\Tests\\": "tests/"
+            "Flashbackzoo\\SilverstripePatternLibrary\\": "src/",
+            "Flashbackzoo\\SilverstripePatternLibrary\\Tests\\": "tests/"
         }
     },
     "extra": {

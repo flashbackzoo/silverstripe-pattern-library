@@ -1,22 +1,22 @@
 <?php
 
-namespace Flashbackzoo\SilverstripeStorybook;
+namespace Flashbackzoo\SilverstripePatternLibrary;
 
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
 
-class Story
+class Pattern
 {
     use Configurable;
     use Injectable;
 
     /**
-     * Name of the component.
+     * Name of the pattern.
      */
     protected string $title = "";
 
     /**
-     * Path to the JavaScript (Vue3, React, etc) component file.
+     * Path to the JavaScript (Vue3, React, etc) component to use for the pattern.
      */
     protected string $component = "";
 
@@ -27,8 +27,6 @@ class Story
 
     /**
      * Data to render the component with.
-     *
-     * @see https://storybook.js.org/docs/react/writing-stories/args
      */
     protected array $args = [];
 

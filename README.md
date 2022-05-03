@@ -1,6 +1,6 @@
-# Silverstripe Storybook
+# Silverstripe Pattern Library
 
-Generate a [Storybook](https://storybook.js.org) from Silverstripe templates.
+Framework agnostic pattern library generator for Silverstripe.
 
 ## Getting started
 
@@ -10,7 +10,7 @@ Add the repo to your `composer.json` file
 "repositories": [
     {
         "type": "vcs",
-        "url": "git@github.com:flashbackzoo/silverstripe-storybook.git"
+        "url": "git@github.com:flashbackzoo/silverstripe-pattern-library.git"
     }
 ]
 ```
@@ -18,7 +18,7 @@ Add the repo to your `composer.json` file
 Install (probably from source so you can mess about)
 
 ```
-$ composer require flashbackzoo/silverstripe-storybook --prefer-source
+$ composer require flashbackzoo/silverstripe-pattern-library --prefer-source
 ```
 
 Run the tests
