@@ -25,17 +25,17 @@ class Pattern
     /**
      * Name of the pattern.
      */
-    public string $title = "";
+    public string $title = '';
 
     /**
      * Path to the JavaScript (Vue3, React, etc) component to use for the pattern.
      */
-    public string $component = "";
+    public string $component = '';
 
     /**
      * Path to the Silverstripe template for the component.
      */
-    public string $template = "";
+    public string $template = '';
 
     /**
      * Data to render the component with.
@@ -50,5 +50,9 @@ class Pattern
 
     public function generate() {
         return $this->engine->generate();
+    }
+
+    public function filename() {
+        return $this->title . $this->engine->config()->get('file_suffix');
     }
 }

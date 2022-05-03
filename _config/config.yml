@@ -1,3 +1,5 @@
 ---
 Name: flashbackzoo-pattern-library
 ---
+Flashbackzoo\SilverstripePatternLibrary\Engine\StorybookV6:
+  file_suffix: .stories.js
