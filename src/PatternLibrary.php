@@ -3,6 +3,7 @@
 namespace Flashbackzoo\SilverstripePatternLibrary;
 
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injector;
 
 class PatternLibrary
 {
@@ -25,9 +26,9 @@ class PatternLibrary
     /**
      * @config
      *
-     * Adaptor class to use when generating stories e.g. Vue3 or React.
+     * Adapter class to use when generating stories e.g. Vue3 or React.
      */
-    private static string $adaptor = "";
+    private static string $adapter = "";
 
     /**
      * @config
@@ -41,15 +42,20 @@ class PatternLibrary
      */
     public static function generate()
     {
-        foreach (self::config()->get('patterns') as $config) {
-            $pattern = Pattern::create();
+        $config = self::config();
 
-            $pattern->setTitle($config['title']);
-            $pattern->setComponent($config['component']);
-            $pattern->setTemplate($config['template']);
-            $pattern->setArgs($config['args']);
+        $engine = Injector::inst()->create($config->get('engine'));
+        $adapter = Injector::inst()->create($config->get('adapter'));
 
-            var_dump($pattern);
+        foreach ($config->get('patterns') as $config) {
+            $pattern = Pattern::create($engine, $adapter);
+
+            $pattern->title = $config['title'];
+            $pattern->component = $config['component'];
+            $pattern->template = $config['template'];
+            $pattern->args = $config['args'];
+
+            echo $pattern->generate();
         }
     }
 }
