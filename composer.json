@@ -1,6 +1,6 @@
 {
-    "name": "flashbackzoo/silverstripe-storybook",
-    "description": "Build stories from Silverstripe templates",
+    "name": "flashbackzoo/silverstripe-pattern-library",
+    "description": "Framework agnostic pattern library generator for Silverstripe",
     "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
