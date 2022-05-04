@@ -28,14 +28,19 @@ class Pattern
     public string $title = '';
 
     /**
+     * Name of the component to generate a pattern for.
+     */
+    public string $component_name = '';
+
+    /**
      * Path to the JavaScript (Vue3, React, etc) component to use for the pattern.
      */
-    public string $component = '';
+    public string $component_path = '';
 
     /**
      * Path to the Silverstripe template for the component.
      */
-    public string $template = '';
+    public string $template_path = '';
 
     /**
      * Data to render the component with.
@@ -49,10 +54,18 @@ class Pattern
     }
 
     public function generate() {
-        return $this->engine->generate();
+        $paternData = [
+            'Title' => $this->title,
+            'ComponentName' => $this->component_name,
+            'ComponentPath' => $this->component_path,
+        ];
+
+        $adapterData = $this->adapter->generate($paternData);
+
+        return $this->engine->generate($adapterData);
     }
 
     public function filename() {
-        return $this->title . $this->engine->config()->get('file_suffix');
+        return $this->component_name . $this->engine->config()->get('file_suffix');
     }
 }

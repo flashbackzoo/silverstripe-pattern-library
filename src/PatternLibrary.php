@@ -52,12 +52,13 @@ class PatternLibrary
 
         Filesystem::makeFolder($outputDir);
 
-        foreach ($config->get('patterns') as $config) {
+        foreach ($config->get('patterns') as $key => $config) {
             $pattern = Pattern::create($engine, $adapter);
 
-            $pattern->title = $config['title'];
-            $pattern->component = $config['component'];
-            $pattern->template = $config['template'];
+            $pattern->title = isset($config['title']) ? $config['title'] : $config['component_name'];
+            $pattern->component_name = $config['component_name'];
+            $pattern->component_path = $config['component_path'];
+            $pattern->template_path = $config['template_path'];
             $pattern->args = $config['args'];
 
             file_put_contents($outputDir . '/' . $pattern->filename(), $pattern->generate());

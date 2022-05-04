@@ -6,9 +6,9 @@ use SilverStripe\View\ViewableData;
 
 class StorybookV6 extends Engine
 {
-    public function generate() {
-        $view = ViewableData::create();
-
-        return $view->renderWith(StorybookV6::class)->forTemplate();
+    public function generate($data = []) {
+        return ViewableData::create()
+            ->customise($data)
+            ->renderWith(StorybookV6::class)->forTemplate();
     }
 }
