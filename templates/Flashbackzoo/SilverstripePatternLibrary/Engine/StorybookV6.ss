@@ -6,3 +6,6 @@ export default {
 };
 
 const Template = () => ($PatternTemplate);
+
+export const Primary = Template.bind({});
+Primary.args = $Args;

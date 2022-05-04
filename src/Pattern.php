@@ -6,6 +6,8 @@ use Flashbackzoo\SilverstripePatternLibrary\Adapter\Adapter;
 use Flashbackzoo\SilverstripePatternLibrary\Engine\Engine;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
 
 class Pattern
 {
@@ -58,11 +60,23 @@ class Pattern
             'Title' => $this->title,
             'ComponentName' => $this->component_name,
             'ComponentPath' => $this->component_path,
+            'Args' => $this->argsToTemplateData($this->args),
         ];
 
         $adapterData = $this->adapter->generate($paternData);
 
-        return $this->engine->generate($adapterData);
+        return $this->engine->generate($adapterData)->forTemplate();
+    }
+
+    protected function argsToTemplateData(array $args): ArrayList
+    {
+        $templateData = ArrayList::create();
+
+        foreach ($args as $key => $value) {
+            $templateData->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
+        }
+
+        return $templateData;
     }
 
     public function filename() {

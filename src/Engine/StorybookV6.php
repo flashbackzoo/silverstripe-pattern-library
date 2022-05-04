@@ -9,6 +9,6 @@ class StorybookV6 extends Engine
     public function generate($data = []) {
         return ViewableData::create()
             ->customise($data)
-            ->renderWith(StorybookV6::class)->forTemplate();
+            ->renderWith(StorybookV6::class);
     }
 }
