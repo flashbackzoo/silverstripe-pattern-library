@@ -58,6 +58,7 @@ class PatternLibrary
             $pattern->title = isset($config['title']) ? $config['title'] : $config['component_name'];
             $pattern->component_name = $config['component_name'];
             $pattern->component_path = $config['component_path'];
+            $pattern->component_element = isset($config['component_element']) ? $config['component_element'] : $config['component_name'];
             $pattern->template_path = $config['template_path'];
             $pattern->args = $config['args'];
 

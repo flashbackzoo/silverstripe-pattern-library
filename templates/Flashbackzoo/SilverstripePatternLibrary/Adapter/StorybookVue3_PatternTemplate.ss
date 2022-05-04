@@ -1,7 +1,11 @@
 {
-  components: { $ComponentName },
+  components: {
+    '$ComponentElement': $ComponentName,
+  },
   setup() {
     return { args };
   },
-  template: '<$ComponentName v-bind="args" />',
+  template: `
+    $ComponentTemplate
+  `,
 }

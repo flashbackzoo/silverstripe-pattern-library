@@ -35,6 +35,11 @@ class Pattern
     public string $component_name = '';
 
     /**
+     * Snake cased element used for the component in the Silverstripe template.
+     */
+    public string $component_element = '';
+
+    /**
      * Path to the JavaScript (Vue3, React, etc) component to use for the pattern.
      */
     public string $component_path = '';
@@ -60,6 +65,8 @@ class Pattern
             'Title' => $this->title,
             'ComponentName' => $this->component_name,
             'ComponentPath' => $this->component_path,
+            'ComponentElement' => $this->component_element,
+            'TemplatePath' => $this->template_path,
             'Args' => $this->argsToTemplateData($this->args),
         ];
 

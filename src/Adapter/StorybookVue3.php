@@ -11,8 +11,12 @@ class StorybookVue3 extends Adapter
             ->customise($data)
             ->renderWith(StorybookVue3::class . '_Imports');
 
+        $componentTemplate = ViewableData::create()
+            ->customise([])
+            ->renderWith($data['TemplatePath']);
+
         $patternTemplate = ViewableData::create()
-            ->customise($data)
+            ->customise(array_merge($data, ['ComponentTemplate' => $componentTemplate]))
             ->renderWith(StorybookVue3::class . '_PatternTemplate');
 
         $args = ViewableData::create()

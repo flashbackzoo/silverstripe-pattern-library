@@ -1,5 +1,3 @@
-{
-    <% loop $Args %>
-        $Key: $Value.RAW,
-    <% end_loop %>
-}
+{<% loop $Args %>
+  $Key: $Value.RAW,
+<% end_loop %>};
