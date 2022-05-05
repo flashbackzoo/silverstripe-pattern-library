@@ -76,32 +76,29 @@ Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   # The JS framework to use
   adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
 
-  # When the output files should go
+  # Where to output pattern files
   output: ../stories
 
-  # List of patterns to generate
+  # The patterns you want to generate
   patterns:
     - component:
         name: ExampleComponent
         element: example-component
-
-        # Path to your component file (the example shown above)
         path: ../themes/app/src/ExampleComponent.vue
 
-      # Variables available to your component when rendered inside the pattern file
+      # Data passed to your component inside the pattern file
       args:
         content: >
           '<p>This is my component.</p>'
 
       template:
-        # Name of the template (the example shown above)
         path: Includes\ExampleComponent
 
-        # Data passed to the Silverstripe tmeplate when its rendered into the output file.
+        # Data passed to the Silverstripe template.
         data:
           Title: Hello world!
           Content:
-            XML: content
+            XML: args.content
 ```
 
 Run the build task `/dev/tasks/Flashbackzoo-SilverstripePatternLibrary-GeneratePatternLibraryTask?flush=1`
@@ -128,7 +125,7 @@ const Template = (args) => ({
   template: `
     <div>
       <h1>Hello world!</h1>
-      <example-component :content="content" />
+      <example-component :content="args.content" />
     </div>
   `,
 });
