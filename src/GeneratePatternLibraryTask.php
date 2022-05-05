@@ -15,6 +15,6 @@ class GeneratePatternLibraryTask extends BuildTask
 
     public function run($request)
     {
-        PatternLibrary::generate();
+        PatternLibrary::create()->generate();
     }
 }

@@ -4,11 +4,16 @@ namespace Flashbackzoo\SilverstripePatternLibrary;
 
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\ViewableData;
 
 class PatternLibrary
 {
     use Configurable;
+    use Injectable;
 
     /**
      * @config
@@ -41,20 +46,60 @@ class PatternLibrary
     /**
      * Generate a pattern library.
      */
-    public static function generate()
+    public function generate()
     {
-        $config = self::config();
+        $config = $this->config();
 
         $engine = Injector::inst()->create($config->get('engine'));
         $adapter = Injector::inst()->create($config->get('adapter'));
 
-        $outputDir = rtrim($config->get('output'), '/');
-
-        Filesystem::makeFolder($outputDir);
+        Filesystem::makeFolder($config->get('output'));
 
         foreach ($config->get('patterns') as $config) {
-            $pattern = Pattern::create($engine, $adapter, $config);
-            file_put_contents($outputDir . '/' . $pattern->filename(), $pattern->generate());
+            $data = $this->patternConfigToTemplateData($config);
+            $pattern = $this->renderTemplates($data, [$adapter, $engine]);
+
+            $filename = $config['component']['name'] . $engine->getFileSuffix();
+            $this->writePatternFile($filename, $pattern);
         }
+    }
+
+    protected function patternConfigToTemplateData(array $config): ViewableData
+    {
+        $argsList = ArrayList::create();
+
+        foreach ($config['args'] as $key => $value) {
+            $argsList->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
+        }
+
+        return ArrayData::create([
+            'Title' => isset($config['component']['title'])
+                ? $config['component']['title']
+                : $config['component']['name'],
+            'ComponentName' => $config['component']['name'],
+            'ComponentPath' => $config['component']['path'],
+            'ComponentElement' => $config['component']['element'],
+            'TemplatePath' => $config['template']['path'],
+            'TemplateData' => $config['template']['data'],
+            'Args' => $argsList,
+        ]);
+    }
+
+    public function renderTemplates(ViewableData $data, array $renderers): string
+    {
+        if (empty($renderers)) {
+            return $data->renderWith(PatternLibrary::class)->forTemplate();
+        }
+
+        $renderer = array_shift($renderers);
+
+        return $this->renderTemplates($renderer->render($data), $renderers);
+    }
+
+    protected function writePatternFile(string $filename, string $content)
+    {
+        $outputDir = rtrim($this->config()->get('output'), '/');
+
+        return file_put_contents($outputDir . '/' . $filename, $content);
     }
 }

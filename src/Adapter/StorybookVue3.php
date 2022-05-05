@@ -2,35 +2,34 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary\Adapter;
 
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
 
 class StorybookVue3 extends Adapter
 {
-    public function generate($data = []) {
-        $imports = ViewableData::create()
-            ->customise($data)
-            ->renderWith(StorybookVue3::class . '_Imports');
+    public function render($data): ArrayData
+    {
+        $imports = $data->renderWith(StorybookVue3::class . '_Imports');
 
         $componentTemplate = ViewableData::create()
-            ->customise($data['TemplateData'])
-            ->renderWith($data['TemplatePath']);
+            ->customise($data->getField('TemplateData'))
+            ->renderWith($data->getField('TemplatePath'));
 
         $patternTemplate = ViewableData::create()
-            ->customise(array_merge($data, ['ComponentTemplate' => $componentTemplate]))
+            ->customise(array_merge($data->toMap(), ['ComponentTemplate' => $componentTemplate]))
             ->renderWith(StorybookVue3::class . '_PatternTemplate');
 
-        $args = ViewableData::create()
-            ->customise($data)
-            ->renderWith(StorybookVue3::class . '_Args');
+        $args = $data->renderWith(StorybookVue3::class . '_Args');
 
-        // TODO: the Engine should define which "slots" it makes available for Adapters e.g. "Imports".
-        return array_merge(
-            $data,
-            [
-                'Imports' => $imports,
-                'PatternTemplate' => $patternTemplate,
-                'Args' => $args,
-            ],
-        );
+        return ArrayData::create([
+            'Adapter' => array_merge(
+                $data->toMap(),
+                [
+                    'Imports' => $imports,
+                    'PatternTemplate' => $patternTemplate,
+                    'Args' => $args,
+                ],
+            ),
+        ]);
     }
 }

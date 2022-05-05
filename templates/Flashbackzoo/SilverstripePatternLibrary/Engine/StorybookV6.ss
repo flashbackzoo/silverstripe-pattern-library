@@ -1,3 +1,4 @@
+<% with $Adapter %>
 $Imports
 
 export default {
@@ -9,3 +10,4 @@ const Template = (args) => ($PatternTemplate);
 
 export const Primary = Template.bind({});
 Primary.args = $Args
+<% end_with %>

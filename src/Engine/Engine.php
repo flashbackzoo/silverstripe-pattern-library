@@ -2,13 +2,14 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary\Engine;
 
+use Flashbackzoo\SilverstripePatternLibrary\Renderer;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
 
 /**
  * The pattern library framework e.g. Storybook.
  */
-abstract class Engine
+abstract class Engine implements Renderer
 {
     use Configurable;
     use Injectable;
@@ -20,5 +21,8 @@ abstract class Engine
      */
     private static string $file_suffix = '';
 
-    abstract public function generate(array $data = []);
+    public function getFileSuffix(): string
+    {
+        return $this->config()->get('file_suffix');
+    }
 }

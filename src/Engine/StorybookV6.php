@@ -2,13 +2,14 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary\Engine;
 
-use SilverStripe\View\ViewableData;
+use SilverStripe\View\ArrayData;
 
 class StorybookV6 extends Engine
 {
-    public function generate($data = []) {
-        return ViewableData::create()
-            ->customise($data)
-            ->renderWith(StorybookV6::class);
+    public function render($data): ArrayData
+    {
+        return ArrayData::create([
+            'Engine' => $data->renderWith(StorybookV6::class),
+        ]);
     }
 }
