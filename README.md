@@ -84,7 +84,7 @@ Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
     - component:
         name: ExampleComponent
         element: example-component
-        
+
         # Path to your component file (the example shown above)
         path: ../themes/app/src/ExampleComponent.vue
 
@@ -118,7 +118,7 @@ export default {
   component: ExampleComponent,
 };
 
-const Template = () => ({
+const Template = (args) => ({
   components: {
     'example-component': ExampleComponent,
   },

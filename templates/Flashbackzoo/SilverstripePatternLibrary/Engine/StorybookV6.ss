@@ -5,7 +5,7 @@ export default {
   component: $ComponentName,
 };
 
-const Template = () => ($PatternTemplate);
+const Template = (args) => ($PatternTemplate);
 
 export const Primary = Template.bind({});
 Primary.args = $Args
