@@ -11,8 +11,9 @@ class StorybookVue3 extends Adapter
             ->customise($data)
             ->renderWith(StorybookVue3::class . '_Imports');
 
+        // TODO: substitute template variables for args when rendering Silverstripe template
         $componentTemplate = ViewableData::create()
-            ->customise([])
+            ->customise($data['TemplateData'])
             ->renderWith($data['TemplatePath']);
 
         $patternTemplate = ViewableData::create()

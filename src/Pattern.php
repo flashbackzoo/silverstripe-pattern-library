@@ -27,37 +27,53 @@ class Pattern
     /**
      * Name of the pattern.
      */
-    public string $title = '';
+    protected string $title = '';
 
     /**
      * Name of the component to generate a pattern for.
      */
-    public string $component_name = '';
+    protected string $component_name = '';
 
     /**
      * Snake cased element used for the component in the Silverstripe template.
      */
-    public string $component_element = '';
+    protected string $component_element = '';
 
     /**
      * Path to the JavaScript (Vue3, React, etc) component to use for the pattern.
      */
-    public string $component_path = '';
+    protected string $component_path = '';
 
     /**
      * Path to the Silverstripe template for the component.
      */
-    public string $template_path = '';
+    protected string $template_path = '';
 
     /**
-     * Data to render the component with.
+     * Data passed to the Silverstripe template when it's rendered.
      */
-    public array $args = [];
+    protected array $template_data = [];
 
-    public function __construct($engine, $adapter)
+    /**
+     * Data passed to the component when rendered by the pattern library.
+     */
+    protected array $args = [];
+
+    public function __construct(Engine $engine, Adapter $adapter, array $config)
     {
         $this->engine = $engine;
         $this->adapter = $adapter;
+
+        $this->title = isset($config['component']['title'])
+            ? $config['component']['title']
+            : $config['component']['name'];
+
+        $this->component_name = $config['component']['name'];
+        $this->component_element = $config['component']['element'];
+        $this->component_path = $config['component']['path'];
+
+        $this->template_path = $config['template']['path'];
+        $this->template_data = $config['template']['data'];
     }
 
     public function generate() {
@@ -67,6 +83,7 @@ class Pattern
             'ComponentPath' => $this->component_path,
             'ComponentElement' => $this->component_element,
             'TemplatePath' => $this->template_path,
+            'TemplateData' => $this->template_data,
             'Args' => $this->argsToTemplateData($this->args),
         ];
 

@@ -36,7 +36,7 @@ class PatternLibrary
      *
      * List patterns to include in the pattern library.
      */
-    private static string $output_dir = '';
+    private static string $output = '';
 
     /**
      * Generate a pattern library.
@@ -48,20 +48,12 @@ class PatternLibrary
         $engine = Injector::inst()->create($config->get('engine'));
         $adapter = Injector::inst()->create($config->get('adapter'));
 
-        $outputDir = rtrim($config->get('output_dir'), '/');
+        $outputDir = rtrim($config->get('output'), '/');
 
         Filesystem::makeFolder($outputDir);
 
-        foreach ($config->get('patterns') as $key => $config) {
-            $pattern = Pattern::create($engine, $adapter);
-
-            $pattern->title = isset($config['title']) ? $config['title'] : $config['component_name'];
-            $pattern->component_name = $config['component_name'];
-            $pattern->component_path = $config['component_path'];
-            $pattern->component_element = isset($config['component_element']) ? $config['component_element'] : $config['component_name'];
-            $pattern->template_path = $config['template_path'];
-            $pattern->args = $config['args'];
-
+        foreach ($config->get('patterns') as $config) {
+            $pattern = Pattern::create($engine, $adapter, $config);
             file_put_contents($outputDir . '/' . $pattern->filename(), $pattern->generate());
         }
     }
