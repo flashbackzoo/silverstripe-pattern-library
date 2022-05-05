@@ -74,6 +74,8 @@ class Pattern
 
         $this->template_path = $config['template']['path'];
         $this->template_data = $config['template']['data'];
+
+        $this->args = $config['args'];
     }
 
     public function generate() {
