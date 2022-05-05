@@ -2,6 +2,8 @@
 
 Framework agnostic pattern library generator for Silverstripe.
 
+**This is a PoC, probably don't use it in real projects**
+
 ## Getting started
 
 Add the repo to your `composer.json` file
