@@ -75,7 +75,9 @@ Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   static_dir: ./themes/app/dist
   output: ../stories
   patterns:
-    - component:
+    ExampleComponent:
+      title: Components/ExampleComponent
+      component:
         name: ExampleComponent
         element: example-component
         path: ../themes/app/src/ExampleComponent.vue
@@ -125,4 +127,40 @@ Primary.args = {
 };
 ```
 
-The module supports a mix of generated and manually created stories in your project at the same time. This means you can gradually convert your existing stories over to generates ones. And you can still write manual stories if you need pattern library features the module doesn't support yet.
+Not all components require JavaScript, for example footers are often just Silverstripe templates, without any complex
+interactions. You can generate patterns for "Silverstripe only" components those too.
+
+```yaml
+---
+Name: app-pattern-library
+After:
+  - '#flashbackzoo-pattern-library'
+---
+Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
+  engine: Flashbackzoo\SilverstripePatternLibrary\Engine\StorybookV6
+  adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
+  output: ../stories
+  patterns:
+    Footer:
+      title: Components/Footer
+      template:
+        name: Includes\Footer
+        data:
+          Columns:
+            - Menu:
+                MenuTitle: Column 1
+                MenuItems:
+                  - Title: Example link 1
+                    Link: '#'
+                  - Title: Example link 2
+            - Menu:
+                MenuTitle: Column 2
+                MenuItems:
+                  - Title: Example link 3
+                    Link: '#'
+                  - Title: Example link 4
+```
+
+The module supports a mix of generated and manually created stories in your project at the same time. This means you can
+gradually convert your existing stories over to generates ones. And you can still write manual stories if you need
+pattern library features the module doesn't support yet.

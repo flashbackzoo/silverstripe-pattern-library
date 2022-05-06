@@ -65,10 +65,14 @@ class PatternLibrary
 
         Filesystem::makeFolder($config->get('output'));
 
-        foreach ($config->get('patterns') as $config) {
+        foreach ($config->get('patterns') as $key => $config) {
             $data = $this->configToPatternLibraryTemplateData($config);
             $pattern = $this->renderPatternLibraryTemplates($data, [$adapter, $engine]);
-            $filename = $config['component']['name'] . $engine->getFileSuffix();
+
+            $filename = isset($config['component']['name'])
+                ? $config['component']['name'] . $engine->getFileSuffix()
+                : $key . $engine->getFileSuffix();
+
             $this->writePatternFile($filename, $pattern);
         }
     }
@@ -78,26 +82,37 @@ class PatternLibrary
      */
     protected function configToPatternLibraryTemplateData(array $config): ViewableData
     {
-        $argsList = ArrayList::create();
+        $data = ArrayData::create([]);
+
+        $data->setField('Title', $config['title']);
 
         if (isset($config['args'])) {
+            $argsList = ArrayList::create();
+
             foreach ($config['args'] as $key => $value) {
                 $argsList->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
             }
+
+            $data->setField('Args', $argsList);
         }
 
-        return ArrayData::create([
-            'Component' => ArrayData::create([
-                'Title' => isset($config['component']['title'])
-                    ? $config['component']['title']
-                    : $config['component']['name'],
-                'Name' => $config['component']['name'],
-                'Path' => $config['component']['path'],
-                'Element' => $config['component']['element'],
-            ]),
-            'Template' => $this->renderComponentTemplate($config['template']),
-            'Args' => $argsList,
-        ]);
+        if (isset($config['component'])) {
+            $data->setField(
+                'Component',
+                ArrayData::create([
+                    'Title' => isset($config['component']['title'])
+                        ? $config['component']['title']
+                        : $config['component']['name'],
+                    'Name' => $config['component']['name'],
+                    'Path' => $config['component']['path'],
+                    'Element' => $config['component']['element'],
+                ]),
+            );
+        }
+
+        $data->setField('Template', $this->renderComponentTemplate($config['template']));
+
+        return $data;
     }
 
     protected function renderComponentTemplate(array $templateConfig): DBHTMLText
