@@ -68,8 +68,10 @@ class PatternLibrary
     {
         $argsList = ArrayList::create();
 
-        foreach ($config['args'] as $key => $value) {
-            $argsList->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
+        if (isset($config['args'])) {
+            foreach ($config['args'] as $key => $value) {
+                $argsList->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
+            }
         }
 
         return ArrayData::create([
