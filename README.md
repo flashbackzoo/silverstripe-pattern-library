@@ -72,6 +72,7 @@ After:
 Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   engine: Flashbackzoo\SilverstripePatternLibrary\Engine\StorybookV6
   adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
+  static_dir: ./themes/app/dist
   output: ../stories
   patterns:
     - component:
