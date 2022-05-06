@@ -123,3 +123,5 @@ Primary.args = {
   content: '<p>This is my component.</p>',
 };
 ```
+
+The module supports a mix of generated and manually created stories in your project at the same time. This means you can gradually convert your existing stories over to generates ones. And you can still write manual stories if you need pattern library features the module doesn't support yet.
