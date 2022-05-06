@@ -2,13 +2,14 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary;
 
-use SilverStripe\Dev\Debug;
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Manifest\ResourceURLGenerator;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
 
@@ -16,6 +17,13 @@ class PatternLibrary
 {
     use Configurable;
     use Injectable;
+
+    /**
+     * @config
+     *
+     * Directory where static assets are served.
+     */
+    private static string $static_dir = '';
 
     /**
      * @config
@@ -58,15 +66,17 @@ class PatternLibrary
         Filesystem::makeFolder($config->get('output'));
 
         foreach ($config->get('patterns') as $config) {
-            $data = $this->patternConfigToTemplateData($config);
-            $pattern = $this->renderTemplates($data, [$adapter, $engine]);
-
+            $data = $this->configToPatternLibraryTemplateData($config);
+            $pattern = $this->renderPatternLibraryTemplates($data, [$adapter, $engine]);
             $filename = $config['component']['name'] . $engine->getFileSuffix();
             $this->writePatternFile($filename, $pattern);
         }
     }
 
-    protected function patternConfigToTemplateData(array $config): ViewableData
+    /**
+     * Prepare user defined config to be rendered by the pattern library Silverstripe templates.
+     */
+    protected function configToPatternLibraryTemplateData(array $config): ViewableData
     {
         $argsList = ArrayList::create();
 
@@ -75,8 +85,6 @@ class PatternLibrary
                 $argsList->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
             }
         }
-
-        $templateData = $this->arrayToTemplateData($config['template']['data'], ArrayData::create([]));
 
         return ArrayData::create([
             'Component' => ArrayData::create([
@@ -87,19 +95,47 @@ class PatternLibrary
                 'Path' => $config['component']['path'],
                 'Element' => $config['component']['element'],
             ]),
-            'Template' => $templateData->renderWith($config['template']['name']),
+            'Template' => $this->renderComponentTemplate($config['template']),
             'Args' => $argsList,
         ]);
     }
 
-    protected function arrayToTemplateData(array $config, ViewableData $data): ViewableData
+    protected function renderComponentTemplate(array $templateConfig): DBHTMLText
+    {
+        $staticDir = $this->config()->get('static_dir');
+
+        if ($staticDir) {
+            // Swap out the ResourceURLGenerator so assets are served by the pattern library instead of Silverstripe.
+            Injector::nest();
+            Injector::inst()->registerService(
+                StaticResourceURLGenerator::create($staticDir),
+                ResourceURLGenerator::class,
+            );
+        }
+
+        $templateData = $this->configToComponentTemplateData($templateConfig['data'], ArrayData::create([]));
+        $renderedTemplate = $templateData->renderWith($templateConfig['name']);
+
+        // Reset the ResourceURLGenerator.
+        if ($staticDir) {
+            Injector::unnest();
+        }
+
+        return $renderedTemplate;
+    }
+
+    /**
+     * Turn the component template data (an array defined in config) into something that the Silverstripe templating
+     * engine can use. Basically wrap evething in an ArrayData or ArrayList so template loops etc work.
+     */
+    protected function configToComponentTemplateData(array $config, ViewableData $data): ViewableData
     {
         foreach ($config as $key => $configValue) {
             $fieldValue = $configValue;
 
             if (is_array($configValue)) {
                 $dataClass = ArrayLib::is_associative($configValue) ? ArrayData::class : ArrayList::class;
-                $fieldValue = $this->arrayToTemplateData($configValue, $dataClass::create([]));
+                $fieldValue = $this->configToComponentTemplateData($configValue, $dataClass::create([]));
             }
 
             if ($data instanceof ArrayList) {
@@ -112,7 +148,7 @@ class PatternLibrary
         return $data;
     }
 
-    public function renderTemplates(ViewableData $data, array $renderers): string
+    public function renderPatternLibraryTemplates(ViewableData $data, array $renderers): string
     {
         if (empty($renderers)) {
             return $data->renderWith(PatternLibrary::class)->forTemplate();
@@ -120,7 +156,7 @@ class PatternLibrary
 
         $renderer = array_shift($renderers);
 
-        return $this->renderTemplates($renderer->render($data), $renderers);
+        return $this->renderPatternLibraryTemplates($renderer->render($data), $renderers);
     }
 
     protected function writePatternFile(string $filename, string $content)
