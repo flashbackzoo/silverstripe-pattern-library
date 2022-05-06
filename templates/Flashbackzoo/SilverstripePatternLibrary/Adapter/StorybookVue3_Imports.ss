@@ -1,1 +1,1 @@
-import $ComponentName from '$ComponentPath';
+import $Component.Name from '$Component.Path';

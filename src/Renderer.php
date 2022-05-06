@@ -2,9 +2,9 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary;
 
-use SilverStripe\View\ViewableData;
+use SilverStripe\View\ArrayData;
 
 interface Renderer
 {
-    public function render(ViewableData $data): ViewableData;
+    public function render(ArrayData $data): ArrayData;
 }

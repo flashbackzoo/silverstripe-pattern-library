@@ -1,13 +1,11 @@
-<% with $Adapter %>
-$Imports
+$Adapter.Imports
 
 export default {
-  title: '$Title',
-  component: $ComponentName,
+  title: '$Component.Title',
+  component: $Component.Name,
 };
 
-const Template = (args) => ($PatternTemplate);
+const Template = (args) => ($Adapter.Template);
 
 export const Primary = Template.bind({});
-Primary.args = $Args
-<% end_with %>
+Primary.args = $Adapter.Args

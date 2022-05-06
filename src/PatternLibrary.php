@@ -73,14 +73,17 @@ class PatternLibrary
         }
 
         return ArrayData::create([
-            'Title' => isset($config['component']['title'])
-                ? $config['component']['title']
-                : $config['component']['name'],
-            'ComponentName' => $config['component']['name'],
-            'ComponentPath' => $config['component']['path'],
-            'ComponentElement' => $config['component']['element'],
-            'TemplatePath' => $config['template']['path'],
-            'TemplateData' => $config['template']['data'],
+            'Component' => ArrayData::create([
+                'Title' => isset($config['component']['title'])
+                    ? $config['component']['title']
+                    : $config['component']['name'],
+                'Name' => $config['component']['name'],
+                'Path' => $config['component']['path'],
+                'Element' => $config['component']['element'],
+            ]),
+            'Template' => ViewableData::create()
+                ->customise($config['template']['data'])
+                ->renderWith($config['template']['name']),
             'Args' => $argsList,
         ]);
     }

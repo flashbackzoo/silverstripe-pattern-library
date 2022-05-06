@@ -1,11 +1,11 @@
 {
   components: {
-    '$ComponentElement': $ComponentName,
+    '$Component.Element': $Component.Name,
   },
   setup() {
     return { args };
   },
   template: `
-    $ComponentTemplate
+    $Template
   `,
 }
