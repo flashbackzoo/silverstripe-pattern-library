@@ -2,10 +2,12 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary;
 
+use SilverStripe\Dev\Debug;
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
@@ -74,6 +76,8 @@ class PatternLibrary
             }
         }
 
+        $templateData = $this->arrayToTemplateData($config['template']['data'], ArrayData::create([]));
+
         return ArrayData::create([
             'Component' => ArrayData::create([
                 'Title' => isset($config['component']['title'])
@@ -83,11 +87,29 @@ class PatternLibrary
                 'Path' => $config['component']['path'],
                 'Element' => $config['component']['element'],
             ]),
-            'Template' => ViewableData::create()
-                ->customise($config['template']['data'])
-                ->renderWith($config['template']['name']),
+            'Template' => $templateData->renderWith($config['template']['name']),
             'Args' => $argsList,
         ]);
+    }
+
+    protected function arrayToTemplateData(array $config, ViewableData $data): ViewableData
+    {
+        foreach ($config as $key => $configValue) {
+            $fieldValue = $configValue;
+
+            if (is_array($configValue)) {
+                $dataClass = ArrayLib::is_associative($configValue) ? ArrayData::class : ArrayList::class;
+                $fieldValue = $this->arrayToTemplateData($configValue, $dataClass::create([]));
+            }
+
+            if ($data instanceof ArrayList) {
+                $data->add($fieldValue);
+            } else {
+                $data->setField($key, $fieldValue);
+            }
+        }
+
+        return $data;
     }
 
     public function renderTemplates(ViewableData $data, array $renderers): string
