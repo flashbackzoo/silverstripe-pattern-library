@@ -78,10 +78,10 @@ ExampleComponent:
     path: ../themes/app/src/ExampleComponent.vue
   template:
     name: Includes\ExampleComponent
-  data:
-    Title: Hello world!
-    Content:
-    XML: args.content
+    data:
+      Title: Hello world!
+      Content:
+        XML: args.content
   args:
     content: >
       '<p>This is my component.</p>'
@@ -150,22 +150,22 @@ Footer:
   title: Components/Footer
   template:
     name: Includes\Footer
-  data:
-    Columns:
-      - Menu:
-          MenuTitle: Column 1
-          MenuItems:
-            - Title: Example link 1
-              Link: '#'
-            - Title: Example link 2
-              Link: '#'
-      - Menu:
-          MenuTitle: Column 2
-          MenuItems:
-            - Title: Example link 3
-              Link: '#'
-            - Title: Example link 4
-              Link: '#'
+    data:
+      Columns:
+        - Menu:
+            MenuTitle: Column 1
+            MenuItems:
+              - Title: Example link 1
+                Link: '#'
+              - Title: Example link 2
+                Link: '#'
+        - Menu:
+            MenuTitle: Column 2
+            MenuItems:
+              - Title: Example link 3
+                Link: '#'
+              - Title: Example link 4
+                Link: '#'
 ```
 
 The module supports having a mix of generated and manually created stories in your project. This means you can gradually
