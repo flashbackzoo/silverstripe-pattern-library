@@ -129,20 +129,6 @@ Primary.args = {
 Not all components require JavaScript, for example footers are often just Silverstripe templates, without any complex
 interactions. You can generate patterns for "Silverstripe only" components those too.
 
-```yaml
----
-Name: app-pattern-library
-After:
-  - '#flashbackzoo-pattern-library'
----
-Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
-  engine: Flashbackzoo\SilverstripePatternLibrary\Engine\StorybookV6
-  adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
-  output: ./stories
-  patterns:
-    - ./app/pattern-library/footer.yml
-```
-
 **app/pattern-library/footer.yml**
 
 ```yaml
