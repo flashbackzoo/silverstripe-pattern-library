@@ -12,6 +12,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
+use Symfony\Component\Yaml\Parser;
 
 class PatternLibrary
 {
@@ -65,16 +66,28 @@ class PatternLibrary
 
         Filesystem::makeFolder($config->get('output'));
 
-        foreach ($config->get('patterns') as $key => $config) {
+        $parser = new Parser();
+
+        foreach ($config->get('patterns') as $configFile) {
+            $config = $parser->parse($this->readPatternConfigFile($configFile));
             $data = $this->configToPatternLibraryTemplateData($config);
             $pattern = $this->renderPatternLibraryTemplates($data, [$adapter, $engine]);
-
             $filename = isset($config['component']['name'])
                 ? $config['component']['name'] . $engine->getFileSuffix()
-                : $key . $engine->getFileSuffix();
+                : array_keys($config)[0] . $engine->getFileSuffix();
 
             $this->writePatternFile($filename, $pattern);
         }
+    }
+
+    protected function readPatternConfigFile($filePath)
+    {
+        return file_get_contents($this->baseDirectory() . '/' . ltrim($filePath, './'));
+    }
+
+    protected function baseDirectory()
+    {
+        return dirname(getcwd());
     }
 
     /**
@@ -83,34 +96,35 @@ class PatternLibrary
     protected function configToPatternLibraryTemplateData(array $config): ViewableData
     {
         $data = ArrayData::create([]);
+        $values = array_values($config)[0];
 
-        $data->setField('Title', $config['title']);
+        $data->setField('Title', $values['title']);
 
-        if (isset($config['args'])) {
+        if (isset($values['args'])) {
             $argsList = ArrayList::create();
 
-            foreach ($config['args'] as $key => $value) {
+            foreach ($values['args'] as $key => $value) {
                 $argsList->push(ArrayData::create(['Key' => $key, 'Value' => $value]));
             }
 
             $data->setField('Args', $argsList);
         }
 
-        if (isset($config['component'])) {
+        if (isset($values['component'])) {
             $data->setField(
                 'Component',
                 ArrayData::create([
-                    'Title' => isset($config['component']['title'])
-                        ? $config['component']['title']
-                        : $config['component']['name'],
-                    'Name' => $config['component']['name'],
-                    'Path' => $config['component']['path'],
-                    'Element' => $config['component']['element'],
+                    'Title' => isset($values['component']['title'])
+                        ? $values['component']['title']
+                        : $values['component']['name'],
+                    'Name' => $values['component']['name'],
+                    'Path' => $values['component']['path'],
+                    'Element' => $values['component']['element'],
                 ]),
             );
         }
 
-        $data->setField('Template', $this->renderComponentTemplate($config['template']));
+        $data->setField('Template', $this->renderComponentTemplate($values['template']));
 
         return $data;
     }

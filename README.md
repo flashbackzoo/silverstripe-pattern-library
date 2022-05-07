@@ -75,24 +75,34 @@ Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   static_dir: ./themes/app/dist
   output: ../stories
   patterns:
-    ExampleComponent:
-      title: Components/ExampleComponent
-      component:
-        name: ExampleComponent
-        element: example-component
-        path: ../themes/app/src/ExampleComponent.vue
-      template:
-        name: Includes\ExampleComponent
-        data:
-          Title: Hello world!
-          Content:
-            XML: args.content
-      args:
-        content: >
-          '<p>This is my component.</p>'
+    - ./app/pattern-library/example-component.yml
 ```
 
-Run the build task `/dev/tasks/Flashbackzoo-SilverstripePatternLibrary-GeneratePatternLibraryTask?flush=1`
+**app/pattern-library/example-component.yml**
+
+```yaml
+ExampleComponent:
+  title: Components/ExampleComponent
+  component:
+    name: ExampleComponent
+    element: example-component
+    path: ../themes/app/src/ExampleComponent.vue
+  template:
+    name: Includes\ExampleComponent
+  data:
+    Title: Hello world!
+    Content:
+    XML: args.content
+  args:
+    content: >
+      '<p>This is my component.</p>'
+```
+
+Run the build task
+
+```
+/dev/tasks/Flashbackzoo-SilverstripePatternLibrary-GeneratePatternLibraryTask?flush=1
+```
 
 This should generate a story in your output directory like
 
@@ -141,26 +151,33 @@ Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
   output: ../stories
   patterns:
-    Footer:
-      title: Components/Footer
-      template:
-        name: Includes\Footer
-        data:
-          Columns:
-            - Menu:
-                MenuTitle: Column 1
-                MenuItems:
-                  - Title: Example link 1
-                    Link: '#'
-                  - Title: Example link 2
-            - Menu:
-                MenuTitle: Column 2
-                MenuItems:
-                  - Title: Example link 3
-                    Link: '#'
-                  - Title: Example link 4
+    - ./app/pattern-library/footer.yml
 ```
 
-The module supports a mix of generated and manually created stories in your project at the same time. This means you can
-gradually convert your existing stories over to generates ones. And you can still write manual stories if you need
-pattern library features the module doesn't support yet.
+**app/pattern-library/footer.yml**
+
+```yaml
+Footer:
+  title: Components/Footer
+  template:
+    name: Includes\Footer
+  data:
+    Columns:
+      - Menu:
+          MenuTitle: Column 1
+          MenuItems:
+            - Title: Example link 1
+              Link: '#'
+            - Title: Example link 2
+              Link: '#'
+      - Menu:
+          MenuTitle: Column 2
+          MenuItems:
+            - Title: Example link 3
+              Link: '#'
+            - Title: Example link 4
+              Link: '#'
+```
+
+The module supports having a mix of generated and manually created stories in your project. This means you can gradually
+convert your existing stories to generates ones. And you can still write manual stories if required.
