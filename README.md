@@ -9,7 +9,7 @@ Framework agnostic pattern library generator for Silverstripe.
 Install the module
 
 ```
-$ composer require flashbackzoo/silverstripe-pattern-library
+composer require flashbackzoo/silverstripe-pattern-library
 ```
 
 Assuming you have a Vue3 component like this
