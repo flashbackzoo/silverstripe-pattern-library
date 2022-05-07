@@ -1,11 +1,24 @@
 {
     "name": "flashbackzoo/silverstripe-pattern-library",
     "description": "Framework agnostic pattern library generator for Silverstripe",
+    "homepage": "https://github.com/flashbackzoo/silverstripe-pattern-library",
     "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
-        "CMS"
+        "CMS",
+        "pattern library",
+        "storybook"
     ],
+    "authors": [
+        {
+            "name": "David Craig",
+            "homepage": "https://davidcraig.co.nz",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/flashbackzoo/silverstripe-pattern-library/issues"
+    },
     "license": "BSD-3-Clause",
     "require": {
         "silverstripe/framework": "^4.0",
@@ -23,12 +36,10 @@
         }
     },
     "extra": {
+        "installer-name": "silverstripe-pattern-library",
         "branch-alias": {
             "dev-master": "2.x-dev"
-        },
-        "expose": [
-            "client/dist"
-        ]
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
