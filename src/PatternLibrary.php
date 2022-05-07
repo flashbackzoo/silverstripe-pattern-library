@@ -2,7 +2,6 @@
 
 namespace Flashbackzoo\SilverstripePatternLibrary;
 
-use SilverStripe\Assets\Filesystem;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
@@ -64,7 +63,11 @@ class PatternLibrary
         $engine = Injector::inst()->create($config->get('engine'));
         $adapter = Injector::inst()->create($config->get('adapter'));
 
-        Filesystem::makeFolder($config->get('output'));
+        $output = $this->getOutputDirectory();
+
+        if (!is_dir($output)) {
+            mkdir($output);
+        }
 
         $parser = new Parser();
 
@@ -190,8 +193,11 @@ class PatternLibrary
 
     protected function writePatternFile(string $filename, string $content)
     {
-        $outputDir = rtrim($this->config()->get('output'), '/');
+        return file_put_contents($this->getOutputDirectory() . '/' . $filename, $content);
+    }
 
-        return file_put_contents($outputDir . '/' . $filename, $content);
+    protected function getOutputDirectory(): string
+    {
+        return $this->baseDirectory() . '/' . trim($this->config()->get('output'), './');
     }
 }

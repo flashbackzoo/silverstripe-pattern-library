@@ -73,7 +73,7 @@ Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   engine: Flashbackzoo\SilverstripePatternLibrary\Engine\StorybookV6
   adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
   static_dir: ./themes/app/dist
-  output: ../stories
+  output: ./stories
   patterns:
     - ./app/pattern-library/example-component.yml
 ```
@@ -149,7 +149,7 @@ After:
 Flashbackzoo\SilverstripePatternLibrary\PatternLibrary:
   engine: Flashbackzoo\SilverstripePatternLibrary\Engine\StorybookV6
   adapter: Flashbackzoo\SilverstripePatternLibrary\Adapter\StorybookVue3
-  output: ../stories
+  output: ./stories
   patterns:
     - ./app/pattern-library/footer.yml
 ```
