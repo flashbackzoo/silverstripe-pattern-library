@@ -10,6 +10,7 @@ use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\SSViewer;
 use SilverStripe\View\ViewableData;
 use Symfony\Component\Yaml\Parser;
 
@@ -136,6 +137,11 @@ class PatternLibrary
     {
         $staticDir = $this->config()->get('static_dir');
 
+        // Disable hash re-writing.
+        // See https://docs.silverstripe.org/en/4/developer_guides/templates/how_tos/disable_anchor_links/
+        $origRewriteDefault = SSViewer::getRewriteHashLinksDefault();
+        SSViewer::setRewriteHashLinksDefault(false);
+
         if ($staticDir) {
             // Swap out the ResourceURLGenerator so assets are served by the pattern library instead of Silverstripe.
             Injector::nest();
@@ -147,6 +153,9 @@ class PatternLibrary
 
         $templateData = $this->configToComponentTemplateData($templateConfig['data'], ArrayData::create([]));
         $renderedTemplate = $templateData->renderWith($templateConfig['name']);
+
+        // Reset hash re-writing.
+        SSViewer::setRewriteHashLinksDefault($origRewriteDefault);
 
         // Reset the ResourceURLGenerator.
         if ($staticDir) {
