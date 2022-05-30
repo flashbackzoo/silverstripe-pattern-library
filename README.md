@@ -125,7 +125,7 @@ Primary.args = {
 ```
 
 Not all components require JavaScript, for example footers are often just Silverstripe templates, without any complex
-interactions. You can generate patterns for "Silverstripe only" components those too.
+interactions. You can generate patterns for "Silverstripe only" components too.
 
 **app/pattern-library/footer.yml**
 
